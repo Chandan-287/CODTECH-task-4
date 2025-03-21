@@ -1,0 +1,96 @@
+#include <SoftwareSerial.h> // Include the SoftwareSerial library to enable communication with the speech recognition module
+
+// Define pins for the LEDs
+const int whiteLED = 2; // Pin 2 for White LED
+const int redLED = 3;   // Pin 3 for Red LED
+const int greenLED = 4; // Pin 4 for Green LED
+const int blueLED = 5;  // Pin 5 for Blue LED
+
+// Define pin for the buzzer
+const int buzzer = 6; // Pin 6 for the Buzzer
+
+// Initialize SoftwareSerial with RX and TX connected to pins 10 and 11 of Arduino
+SoftwareSerial mySerial(10, 11); // RX on pin 10, TX on pin 11
+
+void setup() {
+  // Set all LED and buzzer pins as OUTPUT to control them
+  pinMode(whiteLED, OUTPUT);
+  pinMode(redLED, OUTPUT);
+  pinMode(greenLED, OUTPUT);
+  pinMode(blueLED, OUTPUT);
+  pinMode(buzzer, OUTPUT);
+
+  // Ensure all LEDs and the buzzer are OFF initially
+  digitalWrite(whiteLED, LOW); // White LED OFF
+  digitalWrite(redLED, LOW);   // Red LED OFF
+  digitalWrite(greenLED, LOW); // Green LED OFF
+  digitalWrite(blueLED, LOW);  // Blue LED OFF
+  digitalWrite(buzzer, LOW);   // Buzzer OFF
+
+  // Initialize Serial communication for debugging and the speech recognition module
+  Serial.begin(9600);       // Begin communication with the Serial Monitor at 9600 baud rate
+  mySerial.begin(9600);     // Begin communication with the speech recognition module
+  Serial.println("Speech Recognition System Ready"); // Print a message to indicate the system is ready
+}
+
+void loop() {
+  // Check if a command is available from the speech recognition module
+  if (mySerial.available()) { 
+    int command = mySerial.read(); // Read the command ID sent from the module
+    Serial.println(command);       // Print the command ID for debugging in the Serial Monitor
+
+    // Use a switch-case to process the command received
+    switch (command) {
+      case 1: // Command 1: Turn on the white LED
+        digitalWrite(whiteLED, HIGH); // Set White LED to ON
+        Serial.println("White LED ON"); // Print confirmation
+        break;
+
+      case 2: // Command 2: Turn off the white LED
+        digitalWrite(whiteLED, LOW); // Set White LED to OFF
+        Serial.println("White LED OFF"); // Print confirmation
+        break;
+
+      case 3: // Command 3: Turn on the red LED
+        digitalWrite(redLED, HIGH); // Set Red LED to ON
+        Serial.println("Red LED ON"); // Print confirmation
+        break;
+
+      case 4: // Command 4: Turn off the red LED
+        digitalWrite(redLED, LOW); // Set Red LED to OFF
+        Serial.println("Red LED OFF"); // Print confirmation
+        break;
+
+      case 5: // Command 5: Turn on the green LED
+        digitalWrite(greenLED, HIGH); // Set Green LED to ON
+        Serial.println("Green LED ON"); // Print confirmation
+        break;
+
+      case 6: // Command 6: Turn off the green LED
+        digitalWrite(greenLED, LOW); // Set Green LED to OFF
+        Serial.println("Green LED OFF"); // Print confirmation
+        break;
+
+      case 7: // Command 7: Turn on the blue LED
+        digitalWrite(blueLED, HIGH); // Set Blue LED to ON
+        Serial.println("Blue LED ON"); // Print confirmation
+        break;
+
+      case 8: // Command 8: Turn off the blue LED
+        digitalWrite(blueLED, LOW); // Set Blue LED to OFF
+        Serial.println("Blue LED OFF"); // Print confirmation
+        break;
+
+      case 9: // Command 9: Activate the buzzer
+        digitalWrite(buzzer, HIGH); // Turn the buzzer ON
+        delay(500);                 // Wait for 0.5 seconds
+        digitalWrite(buzzer, LOW);  // Turn the buzzer OFF
+        Serial.println("Buzzer Activated"); // Print confirmation
+        break;
+
+      default: // Handle unknown commands
+        Serial.println("Invalid Command"); // Print an error message
+        break;
+    }
+  }
+}
